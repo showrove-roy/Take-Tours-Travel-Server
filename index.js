@@ -11,7 +11,6 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DBUSER_BUCKET}:${process.env.SECRET_KEY}@cluster0.in3ib7y.mongodb.net/?retryWrites=true&w=majority`;
 
-console.log(uri);
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -26,9 +25,17 @@ async function run() {
 
     // Get all service api
     app.get("/services", async (req, res) => {
+      const limitNum = parseInt(req.query.limit);
       const query = {};
-      const cursor = collections.find(query);
 
+      if (limitNum) {
+        const cursor = collections.find(query).limit(limitNum);
+        const result = await cursor.toArray();
+        res.send(result);
+        return;
+      }
+
+      const cursor = collections.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
