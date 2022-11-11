@@ -22,6 +22,7 @@ async function run() {
     const collections = client
       .db("takeTourTravel")
       .collection("travelServices");
+    const reviewCollections = client.db("takeTourTravel").collection("reviews");
 
     // Get all service api
     app.get("/services", async (req, res) => {
@@ -46,6 +47,13 @@ async function run() {
       const query = { _id: ObjectId(id) };
 
       const result = await collections.findOne(query);
+      res.send(result);
+    });
+
+    // post review
+    app.post("/review", async (req, res) => {
+      const reviewData = req.body;
+      const result = await reviewCollections.insertOne(reviewData);
       res.send(result);
     });
   } finally {
