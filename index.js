@@ -50,6 +50,15 @@ async function run() {
       res.send(result);
     });
 
+    // get all review  api
+    app.get("/review", async (req, res) => {
+      const query = {};
+
+      const cursor = reviewCollections.find(query).sort({ timestamp: -1 });
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // post review
     app.post("/review", async (req, res) => {
       const reviewData = req.body;
