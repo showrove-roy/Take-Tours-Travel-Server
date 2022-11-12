@@ -65,6 +65,24 @@ async function run() {
       const result = await reviewCollections.insertOne(reviewData);
       res.send(result);
     });
+
+    // get single user Reviews
+    app.get("/review/:uid", async (req, res) => {
+      const id = req.params.uid;
+      const query = { re_uid: id };
+      const cursor = reviewCollections.find(query).sort({ timestamp: -1 });
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // delete review
+    app.delete("/review/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+
+      const result = await reviewCollections.deleteOne(query);
+      res.send(result);
+    });
   } finally {
   }
 }
