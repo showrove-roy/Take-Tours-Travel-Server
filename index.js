@@ -24,6 +24,13 @@ async function run() {
       .collection("travelServices");
     const reviewCollections = client.db("takeTourTravel").collection("reviews");
 
+    // post service
+    app.post("/services", async (req, res) => {
+      const reviewData = req.body;
+      const result = await collections.insertOne(reviewData);
+      res.send(result);
+    });
+
     // Get all service api
     app.get("/services", async (req, res) => {
       const limitNum = parseInt(req.query.limit);
