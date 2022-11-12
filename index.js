@@ -65,7 +65,7 @@ async function run() {
 
       const updateDoc = {
         $set: {
-          rating_Count: ratingData.rating_Count,
+          rating_Count: ratingData.ratingCount,
           rating: ratingData.new_rating,
         },
       };
