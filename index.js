@@ -42,7 +42,6 @@ async function run() {
         res.send(result);
         return;
       }
-
       const cursor = collections.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -54,6 +53,24 @@ async function run() {
       const query = { _id: ObjectId(id) };
 
       const result = await collections.findOne(query);
+      res.send(result);
+    });
+
+    // Update Rating number
+    app.put("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const ratingData = req.body;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+
+      const updateDoc = {
+        $set: {
+          rating_Count: ratingData.rating_Count,
+          rating: ratingData.new_rating,
+        },
+      };
+
+      const result = await collections.updateOne(query, updateDoc, options);
       res.send(result);
     });
 
@@ -90,7 +107,7 @@ async function run() {
       res.send(result);
     });
 
-    // get single user Reviews
+    // put single user Reviews
     app.put("/single-review/:id", async (req, res) => {
       const id = req.params.id;
       const reviewData = req.body;
