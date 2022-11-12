@@ -75,6 +75,36 @@ async function run() {
       res.send(result);
     });
 
+    // get single user Reviews
+    app.get("/single-review/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollections.findOne(query);
+      res.send(result);
+    });
+
+    // get single user Reviews
+    app.put("/single-review/:id", async (req, res) => {
+      const id = req.params.id;
+      const reviewData = req.body;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+
+      const updateDoc = {
+        $set: {
+          re_text: reviewData.nRe_text,
+          re_rating: reviewData.nRe_rating,
+        },
+      };
+
+      const result = await reviewCollections.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
     // delete review
     app.delete("/review/:id", async (req, res) => {
       const id = req.params.id;
